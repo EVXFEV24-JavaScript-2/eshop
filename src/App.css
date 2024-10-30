@@ -1,0 +1,24 @@
+#site-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#site-nav-wrapper nav {
+  display: flex;
+  gap: 3rem;
+}
+
+#site-nav-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+#site-nav-right {
+  display: flex;
+  flex-direction: row;
+}
+
+.active-page {
+  color: lightcoral;
+  border-bottom: 1px solid black;
+}
