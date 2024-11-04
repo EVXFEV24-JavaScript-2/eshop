@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { FeaturedPage } from "./pages/Featured";
 import { HomePage } from "./pages/Home";
 import { ProductPage } from "./pages/Product";
 import { RecommendedPage } from "./pages/Recommended";
 import { ShopPage } from "./pages/Shop";
+import { getAllProducts } from "./api/products";
 
 // App
 //  HomePage
@@ -18,26 +19,47 @@ import { ShopPage } from "./pages/Shop";
 
 const PAGE_NAMES = ["home", "shop", "featured", "recommended", "product"];
 
-const HOME_PAGE = PAGE_NAMES[0];
-const SHOP_PAGE = PAGE_NAMES[1];
-const FEATURED_PAGE = PAGE_NAMES[2];
-const RECOMMENDED_PAGE = PAGE_NAMES[3];
-const PRODUCT_PAGE = PAGE_NAMES[4];
+export const HOME_PAGE = PAGE_NAMES[0];
+export const SHOP_PAGE = PAGE_NAMES[1];
+export const FEATURED_PAGE = PAGE_NAMES[2];
+export const RECOMMENDED_PAGE = PAGE_NAMES[3];
+export const PRODUCT_PAGE = PAGE_NAMES[4];
 
 function App() {
   const [page, setPage] = useState(HOME_PAGE);
+  const [pageData, setPageData] = useState({});
+  const [products, setProducts] = useState([]);
 
   let content;
-  if (page === HOME_PAGE) content = <HomePage />;
+  if (page === HOME_PAGE)
+    content = (
+      <HomePage
+        products={products}
+        setPage={setPage}
+        setPageData={setPageData}
+      />
+    );
   else if (page === SHOP_PAGE) content = <ShopPage />;
-  else if (page === FEATURED_PAGE) content = <FeaturedPage />;
+  else if (page === FEATURED_PAGE)
+    content = (
+      <FeaturedPage
+        products={products}
+        setPage={setPage}
+        setPageData={setPageData}
+      />
+    );
   else if (page === RECOMMENDED_PAGE) content = <RecommendedPage />;
-  else if (page === PRODUCT_PAGE) content = <ProductPage />;
+  else if (page === PRODUCT_PAGE)
+    content = <ProductPage pageData={pageData} products={products} />;
   else content = <div>404 Not Found.</div>;
 
   const applyLinkStyling = (activePage) => {
     return `site-nav-link ${page === activePage ? "active-page" : ""}`;
   };
+
+  useEffect(() => {
+    getAllProducts().then(setProducts);
+  }, []);
 
   return (
     <>
@@ -74,7 +96,7 @@ function App() {
             <input />
             <span>Cart</span>
             <button>Sign In</button>
-            <button>Sign In</button>
+            <button>Sign Up</button>
           </div>
         </div>
 
