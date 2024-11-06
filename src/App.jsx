@@ -6,6 +6,7 @@ import { ProductPage } from "./pages/Product";
 import { RecommendedPage } from "./pages/Recommended";
 import { ShopPage } from "./pages/Shop";
 import { getAllProducts } from "./api/products";
+import { ProductCart } from "./components/ProductCart";
 
 // App
 //  HomePage
@@ -29,6 +30,42 @@ function App() {
   const [page, setPage] = useState(HOME_PAGE);
   const [pageData, setPageData] = useState({});
   const [products, setProducts] = useState([]);
+  const [cartVisible, setCartVisible] = useState(false);
+  const [cartProducts, setCartProducts] = useState([]);
+
+  const addProductToCart = (product) => {
+    const item = cartProducts.find((item) => item.product.id === product.id);
+    if (item !== undefined) {
+      modifyCartItemAmount(product.id, 1);
+      return;
+    }
+
+    setCartProducts([...cartProducts, { product, amount: 1 }]);
+  };
+
+  const removeProductFromCart = (productId) => {
+    setCartProducts(
+      cartProducts.filter((item) => item.product.id !== productId)
+    );
+  };
+
+  const modifyCartItemAmount = (productId, change) => {
+    const item = cartProducts.find((item) => item.product.id === productId);
+    if (item !== undefined && item.amount + change <= 0) {
+      removeProductFromCart(productId);
+      return;
+    }
+
+    setCartProducts(
+      cartProducts.map((item) => {
+        if (item.product.id !== productId) {
+          return item;
+        }
+
+        return { ...item, amount: item.amount + change };
+      })
+    );
+  };
 
   let content;
   if (page === HOME_PAGE)
@@ -50,7 +87,13 @@ function App() {
     );
   else if (page === RECOMMENDED_PAGE) content = <RecommendedPage />;
   else if (page === PRODUCT_PAGE)
-    content = <ProductPage pageData={pageData} products={products} />;
+    content = (
+      <ProductPage
+        pageData={pageData}
+        products={products}
+        addProductToCart={addProductToCart}
+      />
+    );
   else content = <div>404 Not Found.</div>;
 
   const applyLinkStyling = (activePage) => {
@@ -94,13 +137,26 @@ function App() {
 
           <div id="site-nav-right">
             <input />
-            <span>Cart</span>
+            <button onClick={() => setCartVisible(!cartVisible)}>
+              Cart ({cartProducts.length})
+            </button>
             <button>Sign In</button>
             <button>Sign Up</button>
           </div>
         </div>
 
         <div id="site-main-wrapper">{content}</div>
+        {cartVisible ? (
+          <div id="cart-sidebar">
+            <ProductCart
+              cart={cartProducts}
+              toggleCartVisibility={() => setCartVisible(false)}
+              clearCart={() => setCartProducts([])}
+              removeProductFromCart={removeProductFromCart}
+              modifyCartItemAmount={modifyCartItemAmount}
+            />
+          </div>
+        ) : null}
       </div>
     </>
   );

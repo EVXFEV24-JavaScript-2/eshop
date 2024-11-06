@@ -22,3 +22,13 @@
   color: lightcoral;
   border-bottom: 1px solid black;
 }
+
+#cart-sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: 1px solid black;
+  height: 100%;
+  width: 30rem;
+  background: rgba(190, 190, 190, 1);
+}

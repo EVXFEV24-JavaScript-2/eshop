@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function ProductPage({ pageData, products }) {
+export function ProductPage({ pageData, products, addProductToCart }) {
   const product = products.find((product) => product.id === pageData.productId);
 
   const [activeImage, setActiveImage] = useState(product.images[0]);
@@ -24,6 +24,7 @@ export function ProductPage({ pageData, products }) {
         </div>
 
         <h2>{product.title}</h2>
+        <button onClick={() => addProductToCart(product)}>Add to cart</button>
       </div>
     </>
   );
