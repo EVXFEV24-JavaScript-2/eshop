@@ -102,7 +102,7 @@ function App() {
 
   // Load all of the API products when the App loads
   useEffect(() => {
-    getAllProducts().then(setProducts);
+    getAllProducts().then(setProducts); // 123
   }, []);
 
   return (
