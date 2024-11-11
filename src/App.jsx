@@ -100,6 +100,7 @@ function App() {
     return `site-nav-link ${page === activePage ? "active-page" : ""}`;
   };
 
+  // Load all of the API products when the App loads
   useEffect(() => {
     getAllProducts().then(setProducts);
   }, []);
